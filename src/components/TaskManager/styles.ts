@@ -14,8 +14,9 @@ const glowAnimation = keyframes`
 
 export const TaskManagerContainer = styled.div`
   padding: 2rem;
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
+  width: 100%;
 `;
 
 export const InputContainer = styled.div`
@@ -24,7 +25,6 @@ export const InputContainer = styled.div`
   align-items: center;
   gap: 1rem;
   width: 100%;
-  max-width: 600px;
   margin: 0 auto;
 `;
 
