@@ -1,44 +1,57 @@
-import styled, { css } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const pulseAnimation = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
+
+const glowAnimation = keyframes`
+  0% { box-shadow: 0 0 5px #FF3D00; }
+  50% { box-shadow: 0 0 20px #FF3D00; }
+  100% { box-shadow: 0 0 5px #FF3D00; }
+`;
 
 export const TaskManagerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
-  width: 100%;
 `;
 
 export const TaskInput = styled.input`
+  width: 70%;
   padding: 1rem;
   font-size: 1.2rem;
-  background: ${({ theme }) => theme.colors.secondary};
-  border: 2px solid ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.text};
+  background: #1E1E1E;
+  border: 2px solid #FF3D00;
+  color: white;
   border-radius: 4px;
-  width: 100%;
-  margin-bottom: 1rem;
+  margin-right: 1rem;
 
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
+  &:focus {
+    outline: none;
+    animation: ${glowAnimation} 1.5s infinite;
   }
 `;
 
 export const AddTaskButton = styled.button`
   padding: 1rem 2rem;
-  background: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.text};
   font-size: 1.2rem;
+  background: #FF3D00;
+  color: white;
+  border: none;
   border-radius: 4px;
-  width: 100%;
-  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #FF6E40;
+    transform: scale(1.05);
+  }
 `;
 
 export const TaskList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  margin-top: 2rem;
 `;
 
 export const Task = styled.div<{ completed: boolean }>`
@@ -46,65 +59,106 @@ export const Task = styled.div<{ completed: boolean }>`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: ${({ theme }) => theme.colors.secondary};
+  margin: 0.5rem 0;
+  background: ${props => props.completed ? '#1B5E20' : '#1E1E1E'};
   border-radius: 4px;
-  border-left: 4px solid ${({ theme, completed }) => 
-    completed ? theme.colors.success : theme.colors.primary};
   transition: all 0.3s ease;
-  
-  ${({ completed }) => completed && css`
-    text-decoration: line-through;
-    opacity: 0.7;
-  `}
+
+  span {
+    text-decoration: ${props => props.completed ? 'line-through' : 'none'};
+    color: ${props => props.completed ? '#A5D6A7' : 'white'};
+  }
 
   button {
     background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    padding: 0.5rem;
-    
+    transition: transform 0.3s ease;
+
     &:hover {
       transform: scale(1.2);
     }
   }
 `;
 
-export const BeastModeButton = styled.button<{ active: boolean }>`
-  padding: 2rem;
-  font-size: 2rem;
-  background: ${({ active, theme }) => active ? theme.colors.error : theme.colors.primary};
-  color: ${({ theme }) => theme.colors.text};
-  border-radius: 50%;
-  width: 300px;
-  height: 300px;
-  margin: 2rem auto;
+export const TimerContainer = styled.div`
+  margin: 2rem 0;
+  text-align: center;
+`;
+
+export const TimerDisplay = styled.div<{ isActive?: boolean }>`
+  font-size: 3.5rem;
   font-weight: bold;
-  box-shadow: 0 0 20px ${({ active, theme }) => active ? theme.colors.error : theme.colors.primary};
+  color: ${props => props.isActive ? '#FF3D00' : 'white'};
+  margin: 1rem 0;
+  animation: ${props => props.isActive ? pulseAnimation : 'none'} 1s infinite;
+`;
+
+export const TimerControls = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+`;
+
+export const TimerButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background: ${props => props.variant === 'primary' ? '#FF3D00' : '#1E1E1E'};
+  color: white;
+  border: ${props => props.variant === 'primary' ? 'none' : '1px solid #FF3D00'};
+  border-radius: 4px;
+  cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover {
+    background: ${props => props.variant === 'primary' ? '#FF6E40' : '#2E2E2E'};
     transform: scale(1.05);
-    box-shadow: 0 0 30px ${({ active, theme }) => active ? theme.colors.error : theme.colors.primary};
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: 200px;
-    height: 200px;
-    font-size: 1.5rem;
-    padding: 1rem;
   }
 `;
 
-export const TimerDisplay = styled.div`
-  font-size: 4rem;
-  font-family: ${({ theme }) => theme.fonts.heading};
-  text-align: center;
-  color: ${({ theme }) => theme.colors.accent};
-  text-shadow: 0 0 10px ${({ theme }) => theme.colors.accent};
+export const ProgressBar = styled.div`
+  width: 100%;
+  height: 10px;
+  background: #1E1E1E;
+  border-radius: 5px;
   margin: 1rem 0;
+  overflow: hidden;
+`;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    font-size: 3rem;
+export const Progress = styled.div<{ progress: number }>`
+  width: ${props => props.progress}%;
+  height: 100%;
+  background: #FF3D00;
+  transition: width 1s linear;
+`;
+
+export const BeastModeButton = styled.button<{ active: boolean }>`
+  width: 100%;
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: ${props => props.active ? '#FF3D00' : '#1E1E1E'};
+  color: white;
+  border: 2px solid #FF3D00;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+  animation: ${props => props.active ? glowAnimation : 'none'} 1.5s infinite;
+
+  &:hover {
+    background: ${props => props.active ? '#FF6E40' : '#2E2E2E'};
+    transform: scale(1.02);
   }
+`;
+
+export const MotivationalMessage = styled.div`
+  font-size: 1.2rem;
+  color: #FFD600;
+  text-align: center;
+  margin: 1rem 0;
+  font-weight: bold;
+  text-transform: uppercase;
 `;
