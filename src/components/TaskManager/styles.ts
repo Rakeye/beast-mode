@@ -19,7 +19,7 @@ export const TaskManagerContainer = styled.div`
 `;
 
 export const TaskInput = styled.input`
-  width: 70%;
+  width: 80%;
   padding: 1rem;
   font-size: 1.2rem;
   background: #1E1E1E;
@@ -31,6 +31,10 @@ export const TaskInput = styled.input`
   &:focus {
     outline: none;
     animation: ${glowAnimation} 1.5s infinite;
+  }
+
+  @media (max-width: 768px) {
+    width: 70%;
   }
 `;
 
