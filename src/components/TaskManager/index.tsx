@@ -183,7 +183,7 @@ const TaskManager: React.FC = () => {
             </>
           )}
 
-          {!isBeastMode ? (
+          {!isBeastMode && (
             <TimerControls>
               {TIMER_PRESETS.map(preset => (
                 <TimerButton
@@ -195,17 +195,13 @@ const TaskManager: React.FC = () => {
                 </TimerButton>
               ))}
             </TimerControls>
-          ) : (
-            <TimerButton onClick={stopTimer} variant="primary">
-              STOP TIMER
-            </TimerButton>
           )}
 
           <BeastModeButton 
             onClick={() => isBeastMode ? stopTimer() : startTimer(1800)}
             active={isBeastMode}
           >
-            {isBeastMode ? 'STOP BEAST MODE' : 'ACTIVATE BEAST MODE'}
+            {isBeastMode ? 'STOP\nBEAST MODE' : 'ACTIVATE\nBEAST MODE'}
           </BeastModeButton>
         </TimerContainer>
       )}

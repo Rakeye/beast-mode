@@ -139,22 +139,30 @@ export const Progress = styled.div<{ progress: number }>`
 `;
 
 export const BeastModeButton = styled.button<{ active: boolean }>`
-  width: 100%;
+  width: 200px;
+  height: 200px;
   padding: 1.5rem;
   font-size: 1.5rem;
   font-weight: bold;
   background: ${props => props.active ? '#FF3D00' : '#1E1E1E'};
   color: white;
   border: 2px solid #FF3D00;
-  border-radius: 4px;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 2rem;
+  margin: 2rem auto;
+  display: block;
   animation: ${props => props.active ? glowAnimation : 'none'} 1.5s infinite;
 
   &:hover {
     background: ${props => props.active ? '#FF6E40' : '#2E2E2E'};
-    transform: scale(1.02);
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 150px;
+    font-size: 1.2rem;
   }
 `;
 
