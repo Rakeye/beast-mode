@@ -73,7 +73,7 @@ export const Task = styled.div<{ completed: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1.2rem;
   margin: 0.5rem 0;
   background: ${props => props.completed ? '#1B5E20' : '#1E1E1E'};
   border-radius: 4px;
@@ -82,6 +82,14 @@ export const Task = styled.div<{ completed: boolean }>`
   span {
     text-decoration: ${props => props.completed ? 'line-through' : 'none'};
     color: ${props => props.completed ? '#A5D6A7' : 'white'};
+    font-size: 1.2rem;
+    flex-grow: 1;
+    margin-right: 1rem;
+  }
+
+  div {
+    display: flex;
+    gap: 0.5rem;
   }
 
   button {
@@ -90,6 +98,7 @@ export const Task = styled.div<{ completed: boolean }>`
     font-size: 1.5rem;
     cursor: pointer;
     transition: transform 0.3s ease;
+    padding: 0.5rem;
 
     &:hover {
       transform: scale(1.2);

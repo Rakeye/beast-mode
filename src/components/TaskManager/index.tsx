@@ -21,6 +21,7 @@ interface TaskItem {
   text: string;
   completed: boolean;
   timeEstimate?: number;
+  createdAt: number;
 }
 
 const TIMER_PRESETS = [
@@ -38,8 +39,24 @@ const MOTIVATIONAL_MESSAGES = [
   "NO PAIN NO GAIN! 💯",
 ];
 
+const STORAGE_KEY = 'beastmode_tasks';
+
 const TaskManager: React.FC = () => {
-  const [tasks, setTasks] = useState<TaskItem[]>([]);
+  const [tasks, setTasks] = useState<TaskItem[]>(() => {
+    const savedTasks = localStorage.getItem(STORAGE_KEY);
+    if (savedTasks) {
+      try {
+        const parsedTasks = JSON.parse(savedTasks);
+        // Sort tasks by creation time, newest first
+        return parsedTasks.sort((a: TaskItem, b: TaskItem) => b.createdAt - a.createdAt);
+      } catch (e) {
+        console.error('Error parsing saved tasks:', e);
+        return [];
+      }
+    }
+    return [];
+  });
+
   const [newTask, setNewTask] = useState('');
   const [isBeastMode, setIsBeastMode] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(1800);
@@ -47,6 +64,11 @@ const TaskManager: React.FC = () => {
   const [motivationalMessage, setMotivationalMessage] = useState('');
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Save tasks to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  }, [tasks]);
 
   useEffect(() => {
     audioRef.current = new Audio('/notification.mp3');
@@ -62,9 +84,10 @@ const TaskManager: React.FC = () => {
       const task: TaskItem = {
         id: Date.now(),
         text: newTask.trim(),
-        completed: false
+        completed: false,
+        createdAt: Date.now()
       };
-      setTasks(prevTasks => [...prevTasks, task]);
+      setTasks(prevTasks => [task, ...prevTasks]); // Add new tasks to the top
       setNewTask('');
     }
   }, [newTask]);
@@ -81,6 +104,10 @@ const TaskManager: React.FC = () => {
         task.id === taskId ? { ...task, completed: !task.completed } : task
       )
     );
+  }, []);
+
+  const deleteTask = useCallback((taskId: number) => {
+    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
   }, []);
 
   const formatTime = (seconds: number): string => {
@@ -161,12 +188,21 @@ const TaskManager: React.FC = () => {
         {tasks.map((task) => (
           <Task key={task.id} completed={task.completed}>
             <span>{task.text}</span>
-            <button 
-              onClick={() => toggleTaskComplete(task.id)}
-              title={task.completed ? 'Task Completed!' : 'Click to complete'}
-            >
-              {task.completed ? '🏆' : '💪'}
-            </button>
+            <div>
+              <button 
+                onClick={() => toggleTaskComplete(task.id)}
+                title={task.completed ? 'Task Completed!' : 'Click to complete'}
+              >
+                {task.completed ? '🏆' : '💪'}
+              </button>
+              <button
+                onClick={() => deleteTask(task.id)}
+                title="Delete task"
+                style={{ marginLeft: '0.5rem' }}
+              >
+                ❌
+              </button>
+            </div>
           </Task>
         ))}
       </TaskList>
