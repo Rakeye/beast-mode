@@ -18,6 +18,15 @@ export const TaskManagerContainer = styled.div`
   margin: 0 auto;
 `;
 
+export const InputContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+`;
+
 export const TaskInput = styled.input`
   width: 80%;
   padding: 1rem;

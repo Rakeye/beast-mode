@@ -12,7 +12,8 @@ import {
   TimerButton,
   ProgressBar,
   Progress,
-  MotivationalMessage
+  MotivationalMessage,
+  InputContainer
 } from './styles';
 
 interface TaskItem {
@@ -145,7 +146,7 @@ const TaskManager: React.FC = () => {
 
   return (
     <TaskManagerContainer>
-      <div>
+      <InputContainer>
         <TaskInput
           type="text"
           value={newTask}
@@ -154,7 +155,7 @@ const TaskManager: React.FC = () => {
           placeholder="ADD YOUR NEXT CONQUEST!"
         />
         <AddTaskButton onClick={handleAddTask}>ADD TASK</AddTaskButton>
-      </div>
+      </InputContainer>
 
       <TaskList>
         {tasks.map((task) => (
