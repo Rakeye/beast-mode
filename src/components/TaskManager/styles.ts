@@ -20,46 +20,48 @@ export const TaskManagerContainer = styled.div`
 
 export const InputContainer = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 1rem;
   width: 100%;
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
 `;
 
 export const TaskInput = styled.input`
-  width: 80%;
-  padding: 1rem;
-  font-size: 1.2rem;
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 1.4rem;
   background: #1E1E1E;
   border: 2px solid #FF3D00;
   color: white;
   border-radius: 4px;
-  margin-right: 1rem;
 
   &:focus {
     outline: none;
     animation: ${glowAnimation} 1.5s infinite;
   }
 
-  @media (max-width: 768px) {
-    width: 70%;
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.6);
   }
 `;
 
 export const AddTaskButton = styled.button`
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
+  width: 100%;
+  padding: 1.2rem;
+  font-size: 1.4rem;
   background: #FF3D00;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-weight: bold;
 
   &:hover {
     background: #FF6E40;
-    transform: scale(1.05);
+    transform: scale(1.02);
   }
 `;
 
