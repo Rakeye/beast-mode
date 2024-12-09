@@ -17,6 +17,14 @@ export const TaskManagerContainer = styled.div`
   max-width: 600px;
   margin: 0 auto;
   width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 `;
 
 export const InputContainer = styled.div`
@@ -26,6 +34,10 @@ export const InputContainer = styled.div`
   gap: 1rem;
   width: 100%;
   margin: 0 auto;
+
+  @media (max-width: 480px) {
+    gap: 0.8rem;
+  }
 `;
 
 export const TaskInput = styled.input`
@@ -44,6 +56,26 @@ export const TaskInput = styled.input`
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.6);
+    font-size: 1.4rem;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+      padding: 0.8rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 0.8rem;
   }
 `;
 
