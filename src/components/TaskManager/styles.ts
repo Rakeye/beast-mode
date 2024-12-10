@@ -220,90 +220,102 @@ export const AddButton = styled.button`
 `;
 
 export const TimerContainer = styled.div`
-  margin: 2rem 0;
-  text-align: center;
-`;
-
-export const TimerDisplay = styled.div<{ isActive?: boolean }>`
-  font-size: 3.5rem;
-  font-weight: bold;
-  color: ${props => props.isActive ? '#FF3D00' : 'white'};
-  margin: 1rem 0;
-  animation: ${props => props.isActive ? pulseAnimation : 'none'} 1s infinite;
-`;
-
-export const TimerControls = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin: 1rem 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+  padding: 2rem;
+  ${glassmorphism}
+  border-radius: 16px;
+  
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
 `;
 
-export const TimerButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  background: ${props => props.variant === 'primary' ? '#FF3D00' : '#1E1E1E'};
+export const BeastModeButton = styled.button<{ active?: boolean }>`
+  background: ${props => props.active ? 
+    'linear-gradient(135deg, #D32F2F 0%, #C62828 100%)' : 
+    'linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%)'};
   color: white;
-  border: ${props => props.variant === 'primary' ? 'none' : '1px solid #FF3D00'};
-  border-radius: 4px;
+  border: none;
+  padding: 1.2rem 2.4rem;
+  font-size: 1.4rem;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
+  animation: ${pulseAnimation} ${props => props.active ? '2s' : '0s'} infinite;
+  
   &:hover {
-    background: ${props => props.variant === 'primary' ? '#FF6E40' : '#2E2E2E'};
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 61, 0, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    padding: 0.8rem 1.6rem;
+  }
+`;
+
+export const TimerDisplay = styled.div`
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  font-family: monospace;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 2rem;
   }
 `;
 
 export const ProgressBar = styled.div`
   width: 100%;
-  height: 10px;
-  background: #1E1E1E;
-  border-radius: 5px;
-  margin: 1rem 0;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
   overflow: hidden;
 `;
 
-export const Progress = styled.div<{ progress: number }>`
-  width: ${props => props.progress}%;
+export const Progress = styled.div<{ width: number }>`
+  width: ${props => props.width}%;
   height: 100%;
-  background: #FF3D00;
+  background: linear-gradient(90deg, #FF3D00, #FF8A00);
   transition: width 1s linear;
 `;
 
-export const BeastModeButton = styled.button<{ active: boolean }>`
-  width: 200px;
-  height: 200px;
-  padding: 1.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  background: ${props => props.active ? '#FF3D00' : '#1E1E1E'};
-  color: white;
-  border: 2px solid #FF3D00;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 2rem auto;
-  display: block;
-  animation: ${props => props.active ? glowAnimation : 'none'} 1.5s infinite;
-
-  &:hover {
-    background: ${props => props.active ? '#FF6E40' : '#2E2E2E'};
-    transform: scale(1.05);
-  }
-
-  @media (max-width: 768px) {
-    width: 150px;
-    height: 150px;
-    font-size: 1.2rem;
-  }
-`;
-
 export const MotivationalMessage = styled.div`
+  color: white;
   font-size: 1.2rem;
-  color: #FFD600;
-  text-align: center;
-  margin: 1rem 0;
   font-weight: bold;
+  text-align: center;
   text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: ${fadeIn} 0.4s ease-out;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;

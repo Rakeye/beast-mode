@@ -11,106 +11,87 @@ import {
   BeastModeButton,
   TimerDisplay,
   TimerContainer,
-  TimerControls,
-  TimerButton,
   ProgressBar,
   Progress,
-  MotivationalMessage,
+  MotivationalMessage
 } from './styles';
 
-interface TaskItem {
+interface Task {
   id: number;
   text: string;
   completed: boolean;
-  timeEstimate?: number;
-  createdAt: number;
+  timestamp: number;
 }
 
-const TIMER_PRESETS = [
-  { label: '20 min', value: 1200 },
-  { label: '30 min', value: 1800 },
-  { label: '45 min', value: 2700 },
-  { label: '60 min', value: 3600 },
-];
-
 const MOTIVATIONAL_MESSAGES = [
-  "DESTROY YOUR LIMITS! 💪",
-  "BEAST MODE ACTIVATED! 🔥",
-  "UNSTOPPABLE FORCE! ⚡",
-  "CRUSH IT! 🦁",
-  "NO PAIN NO GAIN! 💯",
+  "CRUSH IT! 💪",
+  "NO MERCY! 🔥",
+  "BEAST MODE ACTIVATED! 🦁",
+  "UNSTOPPABLE! ⚡️",
+  "DOMINATE! 👊",
+  "LEVEL UP! 🚀",
+  "MAXIMUM EFFORT! 💯",
+  "PURE POWER! 💪",
+  "LEGENDARY! 🏆",
+  "ELITE MODE! 🔱"
 ];
-
-const STORAGE_KEY = 'beastmode_tasks';
 
 const TaskManager: React.FC = () => {
-  const [tasks, setTasks] = useState<TaskItem[]>(() => {
-    const savedTasks = localStorage.getItem(STORAGE_KEY);
-    if (savedTasks) {
-      try {
-        const parsedTasks = JSON.parse(savedTasks);
-        // Sort tasks by creation time, newest first
-        return parsedTasks.sort((a: TaskItem, b: TaskItem) => b.createdAt - a.createdAt);
-      } catch (e) {
-        console.error('Error parsing saved tasks:', e);
-        return [];
-      }
-    }
-    return [];
-  });
-
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState('');
-  const [isBeastMode, setIsBeastMode] = useState(false);
+  const [isTimerActive, setIsTimerActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(1800);
   const [initialTime, setInitialTime] = useState(1800);
   const [motivationalMessage, setMotivationalMessage] = useState('');
   const timerRef = React.useRef<NodeJS.Timeout | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
-  // Save tasks to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-  }, [tasks]);
-
-  useEffect(() => {
-    audioRef.current = new Audio('/notification.mp3');
-    return () => {
-      if (audioRef.current) {
-        audioRef.current = null;
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+      try {
+        setTasks(JSON.parse(savedTasks));
+      } catch (error) {
+        console.error('Error loading tasks:', error);
+        setTasks([]);
       }
-    };
+    }
   }, []);
 
-  const handleAddTask = React.useCallback(() => {
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  const handleAddTask = () => {
     if (newTask.trim()) {
-      const task: TaskItem = {
+      const task: Task = {
         id: Date.now(),
         text: newTask.trim(),
         completed: false,
-        createdAt: Date.now()
+        timestamp: Date.now(),
       };
-      setTasks(prevTasks => [task, ...prevTasks]); // Add new tasks to the top
+      setTasks([task, ...tasks]);
       setNewTask('');
     }
-  }, [newTask]);
+  };
 
-  const handleKeyPress = React.useCallback((e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleAddTask();
     }
-  }, [handleAddTask]);
+  };
 
-  const toggleTaskComplete = React.useCallback((taskId: number) => {
+  const toggleTaskComplete = (taskId: number) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
         task.id === taskId ? { ...task, completed: !task.completed } : task
       )
     );
-  }, []);
+  };
 
-  const deleteTask = React.useCallback((taskId: number) => {
-    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-  }, []);
+  const handleDeleteTask = (taskId: number) => {
+    setTasks(tasks.filter(task => task.id !== taskId));
+  };
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -118,54 +99,54 @@ const TaskManager: React.FC = () => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const updateMotivationalMessage = React.useCallback(() => {
+  const updateMotivationalMessage = () => {
     const randomIndex = Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length);
     setMotivationalMessage(MOTIVATIONAL_MESSAGES[randomIndex]);
-  }, []);
+  };
 
-  const startTimer = React.useCallback((duration: number) => {
+  const startTimer = (duration: number) => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-    
     setInitialTime(duration);
     setTimeRemaining(duration);
-    setIsBeastMode(true);
+    setIsTimerActive(true);
     updateMotivationalMessage();
 
     timerRef.current = setInterval(() => {
-      setTimeRemaining(prev => {
-        if (prev <= 1) {
+      setTimeRemaining((prevTime) => {
+        if (prevTime <= 1) {
           if (timerRef.current) {
             clearInterval(timerRef.current);
           }
-          setIsBeastMode(false);
+          setIsTimerActive(false);
           if (audioRef.current) {
-            audioRef.current.play().catch(console.error);
+            audioRef.current.play();
           }
           return 0;
         }
-        if (prev % 300 === 0) { // Update message every 5 minutes
+        if (prevTime % 300 === 0) { // Update message every 5 minutes
           updateMotivationalMessage();
         }
-        return prev - 1;
+        return prevTime - 1;
       });
     }, 1000);
-  }, [updateMotivationalMessage]);
+  };
 
-  const stopTimer = React.useCallback(() => {
+  const stopTimer = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-    setIsBeastMode(false);
+    setIsTimerActive(false);
     setTimeRemaining(initialTime);
-  }, [initialTime]);
+  };
 
-  const getProgress = React.useCallback(() => {
+  const getProgress = () => {
     return ((initialTime - timeRemaining) / initialTime) * 100;
-  }, [initialTime, timeRemaining]);
+  };
 
-  React.useEffect(() => {
+  useEffect(() => {
+    audioRef.current = new Audio('/notification.mp3');
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -181,67 +162,51 @@ const TaskManager: React.FC = () => {
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="ADD YOUR NEXT CONQUEST!"
+          placeholder="Add your next conquest!"
         />
-        <AddButton onClick={handleAddTask}>ADD TASK</AddButton>
+        <AddButton onClick={handleAddTask}>Add Task</AddButton>
       </InputContainer>
+
+      <TimerContainer>
+        <BeastModeButton
+          onClick={() => isTimerActive ? stopTimer() : startTimer(1800)}
+          active={isTimerActive}
+        >
+          {isTimerActive ? 'STOP' : 'BEAST MODE'}
+        </BeastModeButton>
+        
+        {isTimerActive && (
+          <>
+            <TimerDisplay>{formatTime(timeRemaining)}</TimerDisplay>
+            <ProgressBar>
+              <Progress width={getProgress()} />
+            </ProgressBar>
+            <MotivationalMessage>{motivationalMessage}</MotivationalMessage>
+          </>
+        )}
+      </TimerContainer>
 
       <TaskList>
         {tasks.map((task) => (
-          <TaskItem key={task.id} completed={task.completed}>
+          <TaskItem key={task.id}>
             <TaskText>{task.text}</TaskText>
-            <DeleteButton 
-              onClick={() => deleteTask(task.id)}
-              title="Delete task"
-              style={{ marginLeft: '0.5rem' }}
-            >
-              ❌
-            </DeleteButton>
-            <DeleteButton 
-              onClick={() => toggleTaskComplete(task.id)}
-              title={task.completed ? 'Task Completed!' : 'Click to complete'}
-            >
-              {task.completed ? '🏆' : '💪'}
-            </DeleteButton>
+            <div>
+              <DeleteButton 
+                onClick={() => toggleTaskComplete(task.id)}
+                title={task.completed ? 'Task Completed!' : 'Click to complete'}
+              >
+                {task.completed ? '🏆' : '💪'}
+              </DeleteButton>
+              <DeleteButton 
+                onClick={() => handleDeleteTask(task.id)}
+                title="Delete task"
+              >
+                ❌
+              </DeleteButton>
+            </div>
           </TaskItem>
         ))}
       </TaskList>
-
-      {tasks.length > 0 && (
-        <TimerContainer>
-          <TimerDisplay isActive={isBeastMode}>{formatTime(timeRemaining)}</TimerDisplay>
-          
-          {isBeastMode && (
-            <>
-              <ProgressBar>
-                <Progress progress={getProgress()} />
-              </ProgressBar>
-              <MotivationalMessage>{motivationalMessage}</MotivationalMessage>
-            </>
-          )}
-
-          {!isBeastMode && (
-            <TimerControls>
-              {TIMER_PRESETS.map(preset => (
-                <TimerButton
-                  key={preset.value}
-                  onClick={() => startTimer(preset.value)}
-                  variant="secondary"
-                >
-                  {preset.label}
-                </TimerButton>
-              ))}
-            </TimerControls>
-          )}
-
-          <BeastModeButton 
-            onClick={() => isBeastMode ? stopTimer() : startTimer(1800)}
-            active={isBeastMode}
-          >
-            {isBeastMode ? 'STOP\nBEAST MODE' : 'ACTIVATE\nBEAST MODE'}
-          </BeastModeButton>
-        </TimerContainer>
-      )}
     </TaskManagerContainer>
   );
 };
