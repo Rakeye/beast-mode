@@ -52,6 +52,7 @@ const TaskManager: React.FC = () => {
   const [timeRemaining, setTimeRemaining] = useState(1800);
   const [initialTime, setInitialTime] = useState(1800);
   const [motivationalMessage, setMotivationalMessage] = useState('');
+  const [isMessageTransitioning, setIsMessageTransitioning] = useState(false);
   const timerRef = React.useRef<NodeJS.Timeout | null>(null);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
@@ -109,8 +110,12 @@ const TaskManager: React.FC = () => {
   };
 
   const updateMotivationalMessage = () => {
-    const randomIndex = Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length);
-    setMotivationalMessage(MOTIVATIONAL_MESSAGES[randomIndex]);
+    setIsMessageTransitioning(true);
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length);
+      setMotivationalMessage(MOTIVATIONAL_MESSAGES[randomIndex]);
+      setIsMessageTransitioning(false);
+    }, 400); // Match the duration of the fade-out animation
   };
 
   const startTimer = (duration: number) => {
@@ -203,7 +208,9 @@ const TaskManager: React.FC = () => {
             <ProgressBar>
               <Progress width={getProgress()} />
             </ProgressBar>
-            <MotivationalMessage>{motivationalMessage}</MotivationalMessage>
+            <MotivationalMessage className={isMessageTransitioning ? 'fade-out' : ''}>
+              {motivationalMessage}
+            </MotivationalMessage>
           </>
         )}
       </TimerContainer>
