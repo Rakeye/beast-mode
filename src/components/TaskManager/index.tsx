@@ -124,7 +124,8 @@ const TaskManager: React.FC = () => {
     setSelectedTime(prev => prev === duration ? null : duration);
   };
 
-  const startTimer = () => {
+  const startTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (selectedTime === null) return;
     
     setInitialTime(selectedTime);

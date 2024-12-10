@@ -107,6 +107,75 @@ export const TaskInput = styled.input`
   }
 `;
 
+export const TaskList = styled.div`
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+export const TaskItem = styled.div<{ completed?: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(20, 20, 20, 0.6);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  opacity: ${props => props.completed ? 0.7 : 1};
+  
+  &:hover {
+    background: rgba(30, 30, 30, 0.8);
+  }
+`;
+
+export const TaskText = styled.span<{ completed?: boolean }>`
+  color: white;
+  font-size: 1.1rem;
+  text-decoration: ${props => props.completed ? 'line-through' : 'none'};
+  opacity: ${props => props.completed ? 0.7 : 1};
+`;
+
+export const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  
+  &:hover {
+    color: white;
+    background: rgba(255, 61, 0, 0.2);
+  }
+`;
+
+export const AddButton = styled.button`
+  background: linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-family: 'Industry', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 61, 0, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
 export const PresetContainer = styled.div`
   display: flex;
   gap: 1rem;
@@ -213,85 +282,6 @@ export const MotivationalMessage = styled.div`
 
   &.fade-out {
     opacity: 0;
-  }
-`;
-
-export const AddButton = styled.button`
-  background: linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 16px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-family: 'Industry', sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 61, 0, 0.4);
-  }
-  
-  &:active {
-    transform: translateY(0);
-  }
-`;
-
-export const TaskList = styled.div`
-  margin-top: 2rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-export const TaskItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.2rem;
-  background: rgba(20, 20, 20, 0.6);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  animation: ${fadeIn} 0.4s ease-out;
-  ${glassmorphism}
-
-  &:hover {
-    transform: translateX(4px);
-    background: rgba(30, 30, 30, 0.8);
-  }
-`;
-
-export const TaskText = styled.span`
-  flex: 1;
-  color: white;
-  font-size: 16px;
-  line-height: 1.5;
-  margin-right: 1rem;
-  font-family: 'Roboto Condensed', sans-serif;
-`;
-
-export const DeleteButton = styled.button`
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Industry', sans-serif;
-
-  &:hover {
-    color: #FF3D00;
-    background: rgba(255, 61, 0, 0.1);
-    transform: scale(1.1);
   }
 `;
 
