@@ -56,7 +56,7 @@ const TaskManager: React.FC = () => {
   const [motivationalMessage, setMotivationalMessage] = useState('');
   const [isMessageTransitioning, setIsMessageTransitioning] = useState(false);
   const timerRef = React.useRef<NodeJS.Timeout | null>(null);
-  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+  const audioRef = React.useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const savedTasks = localStorage.getItem('tasks');
@@ -73,6 +73,12 @@ const TaskManager: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.7; // Set volume to 70%
+    }
+  }, []);
 
   const handleAddTask = () => {
     if (newTask.trim()) {
@@ -173,7 +179,6 @@ const TaskManager: React.FC = () => {
   };
 
   useEffect(() => {
-    audioRef.current = new Audio('/notification.mp3');
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -183,6 +188,7 @@ const TaskManager: React.FC = () => {
 
   return (
     <TaskManagerContainer>
+      <audio ref={audioRef} src="/lion-roar.mp3" preload="auto" />
       <InputContainer>
         <TaskInput
           type="text"
