@@ -188,7 +188,7 @@ const TaskManager: React.FC = () => {
 
   return (
     <TaskManagerContainer>
-      <audio ref={audioRef} src="/lion-roar.mp3" preload="auto" />
+      <audio ref={audioRef} src="/lion-roar.flac" preload="auto" />
       <InputContainer>
         <TaskInput
           type="text"
