@@ -15,7 +15,8 @@ import {
   MotivationalMessage,
   PresetContainer,
   PresetButton,
-  StopButton
+  StopButton,
+  BeastModeButton
 } from './styles';
 
 interface Task {
@@ -205,17 +206,22 @@ const TaskManager: React.FC = () => {
 
       <TimerContainer>
         {!isTimerActive ? (
-          <PresetContainer>
-            {TIMER_PRESETS.map((preset) => (
-              <PresetButton
-                key={preset.value}
-                onClick={() => startTimer(preset.value)}
-              >
-                {preset.label}
-                <span>min</span>
-              </PresetButton>
-            ))}
-          </PresetContainer>
+          <>
+            <PresetContainer>
+              {TIMER_PRESETS.map((preset) => (
+                <PresetButton
+                  key={preset.value}
+                  onClick={() => startTimer(preset.value)}
+                >
+                  {preset.label}
+                  <span>min</span>
+                </PresetButton>
+              ))}
+            </PresetContainer>
+            <BeastModeButton onClick={() => startTimer(1800)}>
+              ACTIVATE{'\n'}BEAST MODE
+            </BeastModeButton>
+          </>
         ) : (
           <>
             <TimerDisplay>{formatTime(timeRemaining)}</TimerDisplay>

@@ -306,3 +306,36 @@ export const StopButton = styled.button`
     color: rgba(255, 255, 255, 0.9);
   }
 `;
+
+export const BeastModeButton = styled.button`
+  background: linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%);
+  color: white;
+  border: none;
+  width: 180px;
+  height: 180px;
+  font-size: 1.4rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-family: 'Industry', sans-serif;
+  font-weight: 900;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: pre-line;
+  line-height: 1.4;
+  margin: 2rem 0;
+  
+  &:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 61, 0, 0.4);
+    animation: ${pulseAnimation} 1s infinite;
+  }
+  
+  &:active {
+    transform: translateY(0) scale(1);
+  }
+`;
