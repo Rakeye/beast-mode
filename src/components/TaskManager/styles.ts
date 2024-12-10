@@ -187,7 +187,7 @@ export const TimerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
   width: 100%;
   margin-top: 2rem;
 `;
@@ -318,5 +318,25 @@ export const DeleteButton = styled.button`
     color: #FF3D00;
     background: rgba(255, 61, 0, 0.1);
     transform: scale(1.1);
+  }
+`;
+
+export const StopButton = styled.button`
+  background: rgba(255, 61, 0, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 61, 0, 0.3);
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Industry', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 1rem;
+  
+  &:hover {
+    background: rgba(255, 61, 0, 0.2);
+    color: rgba(255, 255, 255, 0.9);
   }
 `;

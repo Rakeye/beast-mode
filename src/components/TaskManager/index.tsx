@@ -15,7 +15,8 @@ import {
   Progress,
   MotivationalMessage,
   PresetContainer,
-  PresetButton
+  PresetButton,
+  StopButton
 } from './styles';
 
 interface Task {
@@ -181,6 +182,28 @@ const TaskManager: React.FC = () => {
         <AddButton onClick={handleAddTask}>Add Task</AddButton>
       </InputContainer>
 
+      <TaskList>
+        {tasks.map((task) => (
+          <TaskItem key={task.id}>
+            <TaskText>{task.text}</TaskText>
+            <div>
+              <DeleteButton 
+                onClick={() => toggleTaskComplete(task.id)}
+                title={task.completed ? 'Task Completed!' : 'Click to complete'}
+              >
+                {task.completed ? '🏆' : '💪'}
+              </DeleteButton>
+              <DeleteButton 
+                onClick={() => handleDeleteTask(task.id)}
+                title="Delete task"
+              >
+                ❌
+              </DeleteButton>
+            </div>
+          </TaskItem>
+        ))}
+      </TaskList>
+
       <TimerContainer>
         {!isTimerActive && (
           <PresetContainer>
@@ -211,31 +234,12 @@ const TaskManager: React.FC = () => {
             <MotivationalMessage className={isMessageTransitioning ? 'fade-out' : ''}>
               {motivationalMessage}
             </MotivationalMessage>
+            <StopButton onClick={stopTimer}>
+              STOP BEAST MODE
+            </StopButton>
           </>
         )}
       </TimerContainer>
-
-      <TaskList>
-        {tasks.map((task) => (
-          <TaskItem key={task.id}>
-            <TaskText>{task.text}</TaskText>
-            <div>
-              <DeleteButton 
-                onClick={() => toggleTaskComplete(task.id)}
-                title={task.completed ? 'Task Completed!' : 'Click to complete'}
-              >
-                {task.completed ? '🏆' : '💪'}
-              </DeleteButton>
-              <DeleteButton 
-                onClick={() => handleDeleteTask(task.id)}
-                title="Delete task"
-              >
-                ❌
-              </DeleteButton>
-            </div>
-          </TaskItem>
-        ))}
-      </TaskList>
     </TaskManagerContainer>
   );
 };
