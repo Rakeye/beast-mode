@@ -115,10 +115,14 @@ export const PresetContainer = styled.div`
   justify-content: center;
 `;
 
-export const PresetButton = styled.button`
-  background: rgba(255, 61, 0, 0.1);
+export const PresetButton = styled.button<{ selected?: boolean }>`
+  background: ${props => props.selected ? 
+    'rgba(255, 61, 0, 0.3)' : 
+    'rgba(255, 61, 0, 0.1)'};
   color: white;
-  border: 2px solid rgba(255, 61, 0, 0.3);
+  border: 2px solid ${props => props.selected ? 
+    'rgba(255, 61, 0, 0.8)' : 
+    'rgba(255, 61, 0, 0.3)'};
   padding: 0.8rem 1.2rem;
   font-size: 1.4rem;
   border-radius: 12px;
@@ -307,15 +311,17 @@ export const StopButton = styled.button`
   }
 `;
 
-export const BeastModeButton = styled.button`
-  background: linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%);
-  color: white;
+export const BeastModeButton = styled.button<{ disabled?: boolean }>`
+  background: ${props => props.disabled ? 
+    'linear-gradient(135deg, #666666 0%, #444444 100%)' : 
+    'linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%)'};
+  color: ${props => props.disabled ? 'rgba(255, 255, 255, 0.5)' : 'white'};
   border: none;
   width: 180px;
   height: 180px;
   font-size: 1.4rem;
   border-radius: 50%;
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   transition: all 0.3s ease;
   text-transform: uppercase;
   font-family: 'Industry', sans-serif;
@@ -328,14 +334,15 @@ export const BeastModeButton = styled.button`
   white-space: pre-line;
   line-height: 1.4;
   margin: 2rem 0;
+  opacity: ${props => props.disabled ? 0.7 : 1};
   
   &:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 5px 15px rgba(255, 61, 0, 0.4);
-    animation: ${pulseAnimation} 1s infinite;
+    transform: ${props => props.disabled ? 'none' : 'translateY(-2px) scale(1.05)'};
+    box-shadow: ${props => props.disabled ? 'none' : '0 5px 15px rgba(255, 61, 0, 0.4)'};
+    animation: ${props => props.disabled ? 'none' : `${pulseAnimation} 1s infinite`};
   }
   
   &:active {
-    transform: translateY(0) scale(1);
+    transform: ${props => props.disabled ? 'none' : 'translateY(0) scale(1)'};
   }
 `;

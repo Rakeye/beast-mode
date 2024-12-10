@@ -52,6 +52,7 @@ const TaskManager: React.FC = () => {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(1800);
   const [initialTime, setInitialTime] = useState(1800);
+  const [selectedTime, setSelectedTime] = useState<number | null>(null);
   const [motivationalMessage, setMotivationalMessage] = useState('');
   const [isMessageTransitioning, setIsMessageTransitioning] = useState(false);
   const timerRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -119,31 +120,39 @@ const TaskManager: React.FC = () => {
     }, 400); // Match the duration of the fade-out animation
   };
 
-  const startTimer = (duration: number) => {
+  const handleTimeSelect = (duration: number) => {
+    setSelectedTime(duration);
+  };
+
+  const startTimer = () => {
+    if (selectedTime === null) return;
+    
+    setInitialTime(selectedTime);
+    setTimeRemaining(selectedTime);
+    setIsTimerActive(true);
+    updateMotivationalMessage();
+    
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-    setInitialTime(duration);
-    setTimeRemaining(duration);
-    setIsTimerActive(true);
-    updateMotivationalMessage();
-
+    
     timerRef.current = setInterval(() => {
-      setTimeRemaining((prevTime) => {
-        if (prevTime <= 1) {
+      setTimeRemaining(prev => {
+        if (prev <= 1) {
           if (timerRef.current) {
             clearInterval(timerRef.current);
           }
-          setIsTimerActive(false);
           if (audioRef.current) {
             audioRef.current.play();
           }
+          setIsTimerActive(false);
+          setSelectedTime(null);
           return 0;
         }
-        if (prevTime % 300 === 0) { // Update message every 5 minutes
+        if (prev % 300 === 0) { // Update message every 5 minutes
           updateMotivationalMessage();
         }
-        return prevTime - 1;
+        return prev - 1;
       });
     }, 1000);
   };
@@ -211,14 +220,18 @@ const TaskManager: React.FC = () => {
               {TIMER_PRESETS.map((preset) => (
                 <PresetButton
                   key={preset.value}
-                  onClick={() => startTimer(preset.value)}
+                  onClick={() => handleTimeSelect(preset.value)}
+                  selected={selectedTime === preset.value}
                 >
                   {preset.label}
                   <span>min</span>
                 </PresetButton>
               ))}
             </PresetContainer>
-            <BeastModeButton onClick={() => startTimer(1800)}>
+            <BeastModeButton 
+              onClick={startTimer}
+              disabled={selectedTime === null}
+            >
               ACTIVATE{'\n'}BEAST MODE
             </BeastModeButton>
           </>
