@@ -39,7 +39,7 @@ const MOTIVATIONAL_MESSAGES = [
 ];
 
 const TIMER_PRESETS = [
-  { label: '20', value: 1200 },
+  { label: '15', value: 900 },
   { label: '30', value: 1800 },
   { label: '45', value: 2700 },
   { label: '60', value: 3600 },
@@ -194,7 +194,7 @@ const TaskManager: React.FC = () => {
           onClick={() => isTimerActive ? stopTimer() : startTimer(1800)}
           active={isTimerActive}
         >
-          {isTimerActive ? 'STOP' : 'BEAST MODE'}
+          {isTimerActive ? 'STOP' : 'ACTIVATE\nBEAST MODE'}
         </BeastModeButton>
         
         {isTimerActive && (

@@ -297,33 +297,42 @@ export const BeastModeButton = styled.button<{ active?: boolean }>`
     'linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%)'};
   color: white;
   border: none;
-  padding: 1.2rem 2.4rem;
+  width: 180px;
+  height: 180px;
   font-size: 1.4rem;
-  border-radius: 50px;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 2px;
   animation: ${pulseAnimation} ${props => props.active ? '2s' : '0s'} infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: pre-line;
+  line-height: 1.4;
   
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.05);
     box-shadow: 0 5px 15px rgba(255, 61, 0, 0.4);
   }
   
   &:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
   @media (max-width: 768px) {
+    width: 150px;
+    height: 150px;
     font-size: 1.2rem;
-    padding: 1rem 2rem;
   }
   
   @media (max-width: 480px) {
+    width: 130px;
+    height: 130px;
     font-size: 1rem;
-    padding: 0.8rem 1.6rem;
   }
 `;
 
