@@ -121,7 +121,7 @@ const TaskManager: React.FC = () => {
   };
 
   const handleTimeSelect = (duration: number) => {
-    setSelectedTime(duration);
+    setSelectedTime(prev => prev === duration ? null : duration);
   };
 
   const startTimer = () => {
@@ -142,15 +142,10 @@ const TaskManager: React.FC = () => {
           if (timerRef.current) {
             clearInterval(timerRef.current);
           }
-          if (audioRef.current) {
-            audioRef.current.play();
-          }
+          playAlarm();
           setIsTimerActive(false);
           setSelectedTime(null);
           return 0;
-        }
-        if (prev % 300 === 0) { // Update message every 5 minutes
-          updateMotivationalMessage();
         }
         return prev - 1;
       });

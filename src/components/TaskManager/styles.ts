@@ -115,12 +115,16 @@ export const PresetContainer = styled.div`
   justify-content: center;
 `;
 
-export const PresetButton = styled.button<{ selected?: boolean }>`
-  background: ${props => props.selected ? 
+interface PresetButtonProps {
+  selected?: boolean;
+}
+
+export const PresetButton = styled.button<PresetButtonProps>`
+  background: ${({ selected }) => selected ? 
     'rgba(255, 61, 0, 0.3)' : 
     'rgba(255, 61, 0, 0.1)'};
   color: white;
-  border: 2px solid ${props => props.selected ? 
+  border: 2px solid ${({ selected }) => selected ? 
     'rgba(255, 61, 0, 0.8)' : 
     'rgba(255, 61, 0, 0.3)'};
   padding: 0.8rem 1.2rem;
@@ -311,7 +315,11 @@ export const StopButton = styled.button`
   }
 `;
 
-export const BeastModeButton = styled.button<{ disabled?: boolean }>`
+interface BeastModeButtonProps {
+  disabled?: boolean;
+}
+
+export const BeastModeButton = styled.button<BeastModeButtonProps>`
   background: ${props => props.disabled ? 
     'linear-gradient(135deg, #666666 0%, #444444 100%)' : 
     'linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%)'};
