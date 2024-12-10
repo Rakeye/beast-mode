@@ -183,6 +183,15 @@ export const BeastModeButton = styled.button<{ active?: boolean }>`
   }
 `;
 
+export const TimerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  margin-top: 2rem;
+`;
+
 export const TimerDisplay = styled.div`
   font-family: 'Goldman', monospace;
   font-size: 72px;
