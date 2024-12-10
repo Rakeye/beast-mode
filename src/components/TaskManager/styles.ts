@@ -149,40 +149,6 @@ export const PresetButton = styled.button`
   }
 `;
 
-export const BeastModeButton = styled.button<{ active?: boolean }>`
-  background: ${props => props.active ? 
-    'linear-gradient(135deg, #D32F2F 0%, #C62828 100%)' : 
-    'linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%)'};
-  color: white;
-  border: none;
-  width: 180px;
-  height: 180px;
-  font-size: 1.4rem;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-family: 'Industry', sans-serif;
-  font-weight: 900;
-  letter-spacing: 2px;
-  animation: ${pulseAnimation} ${props => props.active ? '2s' : '0s'} infinite;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  white-space: pre-line;
-  line-height: 1.4;
-  
-  &:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 5px 15px rgba(255, 61, 0, 0.4);
-  }
-  
-  &:active {
-    transform: translateY(0) scale(1);
-  }
-`;
-
 export const TimerContainer = styled.div`
   display: flex;
   flex-direction: column;

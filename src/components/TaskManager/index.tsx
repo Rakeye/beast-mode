@@ -8,7 +8,6 @@ import {
   TaskText,
   DeleteButton,
   AddButton,
-  BeastModeButton,
   TimerDisplay,
   TimerContainer,
   ProgressBar,
@@ -205,27 +204,19 @@ const TaskManager: React.FC = () => {
       </TaskList>
 
       <TimerContainer>
-        {!isTimerActive && (
+        {!isTimerActive ? (
           <PresetContainer>
             {TIMER_PRESETS.map((preset) => (
               <PresetButton
                 key={preset.value}
                 onClick={() => startTimer(preset.value)}
               >
-                {preset.label}<span>min</span>
+                {preset.label}
+                <span>min</span>
               </PresetButton>
             ))}
           </PresetContainer>
-        )}
-        
-        <BeastModeButton
-          onClick={() => isTimerActive ? stopTimer() : startTimer(1800)}
-          active={isTimerActive}
-        >
-          {isTimerActive ? 'STOP' : 'ACTIVATE\nBEAST MODE'}
-        </BeastModeButton>
-        
-        {isTimerActive && (
+        ) : (
           <>
             <TimerDisplay>{formatTime(timeRemaining)}</TimerDisplay>
             <ProgressBar>
