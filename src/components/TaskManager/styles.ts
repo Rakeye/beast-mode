@@ -129,11 +129,11 @@ export const TaskItem = styled.div<{ completed?: boolean }>`
   }
 `;
 
-export const TaskText = styled.span<{ completed?: boolean }>`
-  color: white;
-  font-size: 1.1rem;
+export const TaskText = styled.span<{ completed: boolean }>`
+  flex: 1;
   text-decoration: ${props => props.completed ? 'line-through' : 'none'};
-  opacity: ${props => props.completed ? 0.7 : 1};
+  color: ${props => props.completed ? '#4CAF50' : 'white'};
+  transition: color 0.3s ease;
 `;
 
 export const DeleteButton = styled.button`

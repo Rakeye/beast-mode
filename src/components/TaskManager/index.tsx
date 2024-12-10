@@ -99,12 +99,27 @@ const TaskManager: React.FC = () => {
     }
   };
 
-  const toggleTaskComplete = (taskId: number) => {
-    setTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
-      )
-    );
+  const toggleTaskCompletion = (id: number) => {
+    setTasks(prevTasks => {
+      const taskIndex = prevTasks.findIndex(task => task.id === id);
+      if (taskIndex === -1) return prevTasks;
+
+      const updatedTasks = [...prevTasks];
+      const task = { ...updatedTasks[taskIndex], completed: !updatedTasks[taskIndex].completed };
+      
+      // Remove the task from its current position
+      updatedTasks.splice(taskIndex, 1);
+      
+      if (task.completed) {
+        // If task is completed, add it to the end
+        updatedTasks.push(task);
+      } else {
+        // If task is uncompleted, add it to the beginning
+        updatedTasks.unshift(task);
+      }
+      
+      return updatedTasks;
+    });
   };
 
   const handleDeleteTask = (taskId: number) => {
@@ -206,7 +221,7 @@ const TaskManager: React.FC = () => {
             <TaskText>{task.text}</TaskText>
             <div>
               <DeleteButton 
-                onClick={() => toggleTaskComplete(task.id)}
+                onClick={() => toggleTaskCompletion(task.id)}
                 title={task.completed ? 'Task Completed!' : 'Click to complete'}
               >
                 {task.completed ? '🏆' : '💪'}
