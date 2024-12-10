@@ -235,6 +235,62 @@ export const TimerContainer = styled.div`
   }
 `;
 
+export const PresetContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  
+  @media (max-width: 480px) {
+    gap: 0.8rem;
+  }
+`;
+
+export const PresetButton = styled.button`
+  background: rgba(255, 61, 0, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 61, 0, 0.3);
+  padding: 0.8rem 1.2rem;
+  font-size: 1.4rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  
+  span {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+  
+  &:hover {
+    background: rgba(255, 61, 0, 0.2);
+    border-color: rgba(255, 61, 0, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    padding: 0.6rem 1rem;
+    min-width: 70px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    padding: 0.5rem 0.8rem;
+    min-width: 60px;
+  }
+`;
+
 export const BeastModeButton = styled.button<{ active?: boolean }>`
   background: ${props => props.active ? 
     'linear-gradient(135deg, #D32F2F 0%, #C62828 100%)' : 

@@ -13,7 +13,9 @@ import {
   TimerContainer,
   ProgressBar,
   Progress,
-  MotivationalMessage
+  MotivationalMessage,
+  PresetContainer,
+  PresetButton
 } from './styles';
 
 interface Task {
@@ -34,6 +36,13 @@ const MOTIVATIONAL_MESSAGES = [
   "PURE POWER! 💪",
   "LEGENDARY! 🏆",
   "ELITE MODE! 🔱"
+];
+
+const TIMER_PRESETS = [
+  { label: '20', value: 1200 },
+  { label: '30', value: 1800 },
+  { label: '45', value: 2700 },
+  { label: '60', value: 3600 },
 ];
 
 const TaskManager: React.FC = () => {
@@ -168,6 +177,19 @@ const TaskManager: React.FC = () => {
       </InputContainer>
 
       <TimerContainer>
+        {!isTimerActive && (
+          <PresetContainer>
+            {TIMER_PRESETS.map((preset) => (
+              <PresetButton
+                key={preset.value}
+                onClick={() => startTimer(preset.value)}
+              >
+                {preset.label}<span>min</span>
+              </PresetButton>
+            ))}
+          </PresetContainer>
+        )}
+        
         <BeastModeButton
           onClick={() => isTimerActive ? stopTimer() : startTimer(1800)}
           active={isTimerActive}
