@@ -338,12 +338,14 @@ export const BeastModeButton = styled.button<BeastModeButtonProps>`
   opacity: ${props => props.disabled ? 0.7 : 1};
   
   &:hover {
-    transform: ${props => props.disabled ? 'none' : 'translateY(-2px) scale(1.05)'};
-    box-shadow: ${props => props.disabled ? 'none' : '0 5px 15px rgba(255, 61, 0, 0.4)'};
-    animation: ${props => props.disabled ? 'none' : `${pulseAnimation} 1s infinite`};
+    transform: ${({ disabled }) => disabled ? 'none' : 'translateY(-2px) scale(1.05)'};
+    box-shadow: ${({ disabled }) => disabled ? 'none' : '0 5px 15px rgba(255, 61, 0, 0.4)'};
+    ${({ disabled }) => !disabled && css`
+      animation: ${pulseAnimation} 1s infinite;
+    `}
   }
   
   &:active {
-    transform: ${props => props.disabled ? 'none' : 'translateY(0) scale(1)'};
+    transform: ${({ disabled }) => disabled ? 'none' : 'translateY(0) scale(1)'};
   }
 `;
