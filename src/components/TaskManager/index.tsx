@@ -1,10 +1,13 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { 
-  TaskManagerContainer, 
-  TaskInput, 
-  AddTaskButton, 
+import React, { useState, useEffect } from 'react';
+import {
+  TaskManagerContainer,
+  InputContainer,
+  TaskInput,
   TaskList,
-  Task,
+  TaskItem,
+  TaskText,
+  DeleteButton,
+  AddButton,
   BeastModeButton,
   TimerDisplay,
   TimerContainer,
@@ -13,7 +16,6 @@ import {
   ProgressBar,
   Progress,
   MotivationalMessage,
-  InputContainer
 } from './styles';
 
 interface TaskItem {
@@ -62,8 +64,8 @@ const TaskManager: React.FC = () => {
   const [timeRemaining, setTimeRemaining] = useState(1800);
   const [initialTime, setInitialTime] = useState(1800);
   const [motivationalMessage, setMotivationalMessage] = useState('');
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const timerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   // Save tasks to localStorage whenever they change
   useEffect(() => {
@@ -79,7 +81,7 @@ const TaskManager: React.FC = () => {
     };
   }, []);
 
-  const handleAddTask = useCallback(() => {
+  const handleAddTask = React.useCallback(() => {
     if (newTask.trim()) {
       const task: TaskItem = {
         id: Date.now(),
@@ -92,13 +94,13 @@ const TaskManager: React.FC = () => {
     }
   }, [newTask]);
 
-  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
+  const handleKeyPress = React.useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleAddTask();
     }
   }, [handleAddTask]);
 
-  const toggleTaskComplete = useCallback((taskId: number) => {
+  const toggleTaskComplete = React.useCallback((taskId: number) => {
     setTasks(prevTasks =>
       prevTasks.map(task =>
         task.id === taskId ? { ...task, completed: !task.completed } : task
@@ -106,7 +108,7 @@ const TaskManager: React.FC = () => {
     );
   }, []);
 
-  const deleteTask = useCallback((taskId: number) => {
+  const deleteTask = React.useCallback((taskId: number) => {
     setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
   }, []);
 
@@ -116,12 +118,12 @@ const TaskManager: React.FC = () => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const updateMotivationalMessage = useCallback(() => {
+  const updateMotivationalMessage = React.useCallback(() => {
     const randomIndex = Math.floor(Math.random() * MOTIVATIONAL_MESSAGES.length);
     setMotivationalMessage(MOTIVATIONAL_MESSAGES[randomIndex]);
   }, []);
 
-  const startTimer = useCallback((duration: number) => {
+  const startTimer = React.useCallback((duration: number) => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
@@ -151,7 +153,7 @@ const TaskManager: React.FC = () => {
     }, 1000);
   }, [updateMotivationalMessage]);
 
-  const stopTimer = useCallback(() => {
+  const stopTimer = React.useCallback(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
@@ -159,11 +161,11 @@ const TaskManager: React.FC = () => {
     setTimeRemaining(initialTime);
   }, [initialTime]);
 
-  const getProgress = useCallback(() => {
+  const getProgress = React.useCallback(() => {
     return ((initialTime - timeRemaining) / initialTime) * 100;
   }, [initialTime, timeRemaining]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -181,29 +183,27 @@ const TaskManager: React.FC = () => {
           onKeyPress={handleKeyPress}
           placeholder="ADD YOUR NEXT CONQUEST!"
         />
-        <AddTaskButton onClick={handleAddTask}>ADD TASK</AddTaskButton>
+        <AddButton onClick={handleAddTask}>ADD TASK</AddButton>
       </InputContainer>
 
       <TaskList>
         {tasks.map((task) => (
-          <Task key={task.id} completed={task.completed}>
-            <span>{task.text}</span>
-            <div>
-              <button 
-                onClick={() => toggleTaskComplete(task.id)}
-                title={task.completed ? 'Task Completed!' : 'Click to complete'}
-              >
-                {task.completed ? '🏆' : '💪'}
-              </button>
-              <button
-                onClick={() => deleteTask(task.id)}
-                title="Delete task"
-                style={{ marginLeft: '0.5rem' }}
-              >
-                ❌
-              </button>
-            </div>
-          </Task>
+          <TaskItem key={task.id} completed={task.completed}>
+            <TaskText>{task.text}</TaskText>
+            <DeleteButton 
+              onClick={() => deleteTask(task.id)}
+              title="Delete task"
+              style={{ marginLeft: '0.5rem' }}
+            >
+              ❌
+            </DeleteButton>
+            <DeleteButton 
+              onClick={() => toggleTaskComplete(task.id)}
+              title={task.completed ? 'Task Completed!' : 'Click to complete'}
+            >
+              {task.completed ? '🏆' : '💪'}
+            </DeleteButton>
+          </TaskItem>
         ))}
       </TaskList>
 
