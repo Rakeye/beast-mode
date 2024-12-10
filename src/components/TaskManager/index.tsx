@@ -120,8 +120,10 @@ const TaskManager: React.FC = () => {
     }, 400); // Match the duration of the fade-out animation
   };
 
-  const handleTimeSelect = (duration: number) => {
-    setSelectedTime(prev => prev === duration ? null : duration);
+  const handleTimeSelect = (e: React.MouseEvent<HTMLButtonElement>, duration: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedTime(duration === selectedTime ? null : duration);
   };
 
   const startTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -221,7 +223,7 @@ const TaskManager: React.FC = () => {
               {TIMER_PRESETS.map((preset) => (
                 <PresetButton
                   key={preset.value}
-                  onClick={() => handleTimeSelect(preset.value)}
+                  onClick={(e) => handleTimeSelect(e, preset.value)}
                   selected={selectedTime === preset.value}
                 >
                   {preset.label}

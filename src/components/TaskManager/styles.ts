@@ -188,7 +188,10 @@ interface PresetButtonProps {
   selected?: boolean;
 }
 
-export const PresetButton = styled.button<PresetButtonProps>`
+export const PresetButton = styled.button.attrs<PresetButtonProps>(props => ({
+  type: 'button',
+  selected: props.selected || false,
+}))<PresetButtonProps>`
   background: ${({ selected }) => selected ? 
     'rgba(255, 61, 0, 0.3)' : 
     'rgba(255, 61, 0, 0.1)'};
