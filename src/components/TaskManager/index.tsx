@@ -218,7 +218,7 @@ const TaskManager: React.FC = () => {
       <TaskList>
         {tasks.map((task) => (
           <TaskItem key={task.id}>
-            <TaskText>{task.text}</TaskText>
+            <TaskText completed={task.completed}>{task.text}</TaskText>
             <div>
               <DeleteButton 
                 onClick={() => toggleTaskCompletion(task.id)}

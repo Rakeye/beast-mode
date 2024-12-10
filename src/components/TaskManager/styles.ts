@@ -129,11 +129,16 @@ export const TaskItem = styled.div<{ completed?: boolean }>`
   }
 `;
 
-export const TaskText = styled.span<{ completed: boolean }>`
+interface TaskTextProps {
+  completed: boolean;
+}
+
+export const TaskText = styled.span<TaskTextProps>`
   flex: 1;
-  text-decoration: ${props => props.completed ? 'line-through' : 'none'};
-  color: ${props => props.completed ? '#4CAF50' : 'white'};
+  text-decoration: ${({ completed }) => completed ? 'line-through' : 'none'};
+  color: ${({ completed }) => completed ? '#4CAF50' : 'white'};
   transition: color 0.3s ease;
+  font-size: 1.1rem;
 `;
 
 export const DeleteButton = styled.button`
