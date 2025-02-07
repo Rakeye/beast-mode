@@ -1,4 +1,4 @@
-import { createGlobalStyle, DefaultTheme } from 'styled-components';
+import { createGlobalStyle, css, DefaultTheme } from 'styled-components';
 
 export const theme: DefaultTheme = {
   colors: {
@@ -11,8 +11,8 @@ export const theme: DefaultTheme = {
     success: '#00FF00'
   },
   fonts: {
-    heading: '"Roboto Condensed", sans-serif',
-    body: '"Roboto", sans-serif'
+    body: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    heading: '"Roboto Condensed", sans-serif'
   },
   breakpoints: {
     mobile: '320px',
@@ -20,6 +20,13 @@ export const theme: DefaultTheme = {
     desktop: '1024px'
   }
 };
+
+export const glassmorphism = css`
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+`;
 
 export const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Condensed:wght@700&display=swap');
@@ -31,29 +38,37 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: ${({ theme }) => theme.colors.background};
-    color: ${({ theme }) => theme.colors.text};
-    font-family: ${({ theme }) => theme.fonts.body};
+    background: ${theme.colors.background};
+    color: ${theme.colors.text};
+    font-family: ${theme.fonts.body};
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: ${({ theme }) => theme.fonts.heading};
+    font-family: ${theme.fonts.heading};
     font-weight: 700;
-    text-transform: uppercase;
   }
 
   button {
     cursor: pointer;
-    font-family: ${({ theme }) => theme.fonts.heading};
-    text-transform: uppercase;
+    font-family: inherit;
     border: none;
     outline: none;
-    transition: all 0.2s ease-in-out;
+    
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
 
-    &:hover {
+    &:hover:not(:disabled) {
       transform: scale(1.05);
     }
+  }
+
+  input, select, textarea {
+    font-family: inherit;
   }
 `;

@@ -12,8 +12,8 @@ declare module 'styled-components' {
       success: string;
     };
     fonts: {
-      heading: string;
       body: string;
+      heading: string;
     };
     breakpoints: {
       mobile: string;
