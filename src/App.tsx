@@ -76,7 +76,7 @@ const App: React.FC = () => {
     setTimerState(current => ({ ...current, ...updates }));
   };
 
-  const startTimer = () => {
+  const handleStartTimer = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
@@ -106,7 +106,7 @@ const App: React.FC = () => {
     }, 1000);
   };
 
-  const stopTimer = () => {
+  const handleStopTimer = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
@@ -138,21 +138,25 @@ const App: React.FC = () => {
             <TaskManager
               tasks={tasks}
               rewards={rewards}
+              timerState={timerState}
               onAddTask={handleAddTask}
               onDeleteTask={handleDeleteTask}
               onToggleTaskCompletion={handleToggleTaskCompletion}
-              timerState={timerState}
               onUpdateTimerState={handleUpdateTimerState}
-              onStartTimer={startTimer}
-              onStopTimer={stopTimer}
+              onStartTimer={handleStartTimer}
+              onStopTimer={handleStopTimer}
             />
-          ) : (
+          ) : activeSection === 'rewards' ? (
             <RewardManager
               rewards={rewards}
               onAddReward={handleAddReward}
               onDeleteReward={handleDeleteReward}
               onToggleRewardUsed={handleToggleRewardUsed}
             />
+          ) : activeSection === 'stats' ? (
+            <div>Stats Coming Soon!</div>
+          ) : (
+            <div>Settings Coming Soon!</div>
           )}
         </MainContent>
       </AppContainer>
