@@ -19,6 +19,8 @@ export interface Reward {
   used: boolean;
   link?: string;
   price?: string;
+  emoji?: string;
+  name?: string;
   notes?: string;
 }
 
