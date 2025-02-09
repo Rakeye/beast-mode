@@ -1,6 +1,12 @@
 import styled, { keyframes } from 'styled-components';
 import { glassmorphism } from '../../styles/theme';
 
+const pulseAnimation = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
+
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -14,9 +20,12 @@ const glowAnimation = keyframes`
 export const TaskManagerContainer = styled.div`
   max-width: 800px;
   margin: 0 auto;
-  ${glassmorphism}
   padding: 2rem;
-  border-radius: 16px;
+  border-radius: 20px;
+  background: rgba(18, 18, 18, 0.8);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  ${glassmorphism}
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -30,26 +39,26 @@ export const TaskManagerContainer = styled.div`
 export const InputContainer = styled.div`
   display: flex;
   gap: 1rem;
-  width: 100%;
-  
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
+  margin-bottom: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 export const TaskInput = styled.input`
   flex: 1;
-  padding: 1rem 1.2rem;
-  font-size: 1rem;
-  background: rgba(30, 30, 30, 0.8);
-  border: 2px solid transparent;
-  border-radius: 12px;
-  color: white;
+  background: transparent;
+  border: none;
+  color: ${props => props.theme.colors.text};
+  font-size: 1.1rem;
+  padding: 0.5rem;
+  border-bottom: 2px solid transparent;
   transition: all 0.3s ease;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-bottom-color: ${props => props.theme.colors.primary};
   }
 
   &::placeholder {
@@ -65,6 +74,7 @@ export const TaskList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-top: 2rem;
 `;
 
 export const TaskItem = styled.div`
@@ -72,10 +82,16 @@ export const TaskItem = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  background: rgba(30, 30, 30, 0.8);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
+  transition: all 0.3s ease;
   animation: ${fadeIn} 0.3s ease-out;
   ${glassmorphism}
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(4px);
+  }
   
   @media (max-width: 768px) {
     padding: 0.8rem;
@@ -138,22 +154,20 @@ export const TimerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: rgba(30, 30, 30, 0.8);
+  gap: 1.5rem;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 16px;
-  ${glassmorphism}
+  position: relative;
 `;
 
 export const TimerDisplay = styled.div`
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: bold;
-  color: ${({ theme }) => theme.colors.primary};
-  text-shadow: 0 0 10px rgba(255, 61, 0, 0.3);
-  
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-  }
+  color: ${props => props.theme.colors.primary};
+  text-shadow: 0 0 20px rgba(255, 61, 0, 0.3);
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
 `;
 
 export const ProgressBar = styled.div`
@@ -174,59 +188,45 @@ export const Progress = styled.div<{ width: number }>`
 export const PresetContainer = styled.div`
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
-  
-  @media (max-width: 768px) {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  margin: 1rem 0;
 `;
 
-export const PresetButton = styled.button<{ active: boolean }>`
-  background: ${props => props.active ? 'rgba(255, 61, 0, 0.3)' : 'rgba(255, 255, 255, 0.1)'};
-  color: white;
+export const PresetButton = styled.button<{ active?: boolean }>`
+  background: ${props => props.active ? 'rgba(255, 61, 0, 0.2)' : 'rgba(255, 255, 255, 0.05)'};
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1.5rem;
   border-radius: 8px;
+  color: ${props => props.theme.colors.text};
   cursor: pointer;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 
-  &:hover:not(:disabled) {
-    background: rgba(255, 61, 0, 0.2);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  @media (max-width: 768px) {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
+  &:hover {
+    background: rgba(255, 61, 0, 0.1);
+    transform: translateY(-2px);
   }
 `;
 
 export const BeastModeButton = styled.button`
   background: linear-gradient(135deg, #FF3D00 0%, #FF8A00 100%);
-  color: white;
   border: none;
   padding: 1rem 2rem;
   border-radius: 12px;
+  color: white;
   font-weight: bold;
-  font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  animation: ${pulseAnimation} 2s infinite ease-in-out;
+  font-size: 1.1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(255, 61, 0, 0.3);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 61, 0, 0.4);
-  }
-  
-  @media (max-width: 768px) {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+    box-shadow: 0 6px 20px rgba(255, 61, 0, 0.4);
   }
 `;
 
@@ -242,10 +242,6 @@ export const StopButton = styled.button`
 
   &:hover {
     background: rgba(255, 0, 0, 0.3);
-  }
-  
-  @media (max-width: 768px) {
-    padding: 0.6rem 1.5rem;
   }
 `;
 

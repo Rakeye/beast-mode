@@ -148,43 +148,34 @@ const TaskManager: React.FC<TaskManagerProps> = ({
           value={newTaskText}
           onChange={(e) => setNewTaskText(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Add a new task..."
+          placeholder="What do you want to accomplish? Press Enter to add..."
         />
-        <RewardSelect
-          value={selectedReward || ''}
-          onChange={(e) => setSelectedReward(Number(e.target.value) || undefined)}
-        >
-          <option value="">No Reward</option>
-          {rewards.map((reward) => (
-            <option key={reward.id} value={reward.id}>
-              {reward.emoji} {reward.name}
-            </option>
-          ))}
-        </RewardSelect>
-        <AddButton onClick={handleAddTask}>Add Task</AddButton>
+        <AddButton onClick={handleAddTask}>
+          <span>+</span> Add Task
+        </AddButton>
       </InputContainer>
 
       <TimerContainer>
         <TimerDisplay>{formatTime(timerState.timeRemaining)}</TimerDisplay>
-        <ProgressBar>
-          <Progress width={getProgress()} />
-        </ProgressBar>
         <PresetContainer>
-          {PRESET_TIMES.map((preset) => (
+          {PRESET_TIMES.map(({ label, value }) => (
             <PresetButton
-              key={preset.value}
-              active={timerState.initialTime === preset.value}
-              onClick={() => handlePresetClick(preset.value / 60)}
-              disabled={timerState.isActive}
+              key={label}
+              active={timerState.initialTime === value}
+              onClick={() => handlePresetClick(value)}
             >
-              {preset.label}
+              <span>⏱️</span> {label}
             </PresetButton>
           ))}
         </PresetContainer>
         {timerState.isActive ? (
-          <StopButton onClick={onStopTimer}>Stop</StopButton>
+          <StopButton onClick={onStopTimer}>
+            <span>⏹️</span> Stop
+          </StopButton>
         ) : (
-          <BeastModeButton onClick={handleStartTimer}>Beast Mode 🦁</BeastModeButton>
+          <BeastModeButton onClick={handleStartTimer}>
+            Beast Mode 🦁
+          </BeastModeButton>
         )}
         <MotivationalMessage transitioning={timerState.isMessageTransitioning}>
           {timerState.motivationalMessage}
@@ -195,18 +186,19 @@ const TaskManager: React.FC<TaskManagerProps> = ({
         {tasks.map((task) => (
           <TaskItem key={task.id}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-              <TaskText
-                completed={task.completed}
-                onClick={() => onToggleTaskCompletion(task.id)}
-              >
+              <input
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => onToggleTaskCompletion(task.id)}
+                style={{ cursor: 'pointer' }}
+              />
+              <TaskText completed={task.completed}>
                 {task.text}
               </TaskText>
               {task.rewardId && (
                 <TaskText completed={task.completed} isReward>
-                  <RewardIcon>
-                    {rewards.find(r => r.id === task.rewardId)?.emoji}
-                  </RewardIcon>
-                  {rewards.find(r => r.id === task.rewardId)?.name}
+                  <RewardIcon>🎁</RewardIcon>
+                  {rewards.find(r => r.id === task.rewardId)?.text}
                 </TaskText>
               )}
             </div>
