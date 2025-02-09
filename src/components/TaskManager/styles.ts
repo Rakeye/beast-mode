@@ -99,18 +99,19 @@ export const TaskItem = styled.div`
   }
 `;
 
-export const TaskText = styled.span<{ completed: boolean; isReward?: boolean }>`
-  flex: 1;
+export const TaskText = styled.div<{ completed?: boolean; isReward?: boolean }>`
+  color: ${props => props.completed ? 'rgba(255, 255, 255, 0.5)' : props.theme.colors.text};
   text-decoration: ${props => props.completed ? 'line-through' : 'none'};
-  opacity: ${props => props.completed ? 0.7 : 1};
-  color: ${props => props.isReward ? '#FFD700' : 'white'};
-  cursor: pointer;
+  flex: 1;
+  font-size: ${props => props.isReward ? '0.9rem' : '1rem'};
+  opacity: ${props => props.isReward ? 0.8 : 1};
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  transition: all 0.3s ease;
   
   &:hover {
-    opacity: 0.8;
+    color: ${props => props.completed ? 'rgba(255, 255, 255, 0.7)' : props.theme.colors.text};
   }
 `;
 
@@ -261,25 +262,32 @@ export const MotivationalMessage = styled.div<{ transitioning: boolean }>`
 `;
 
 export const RewardIcon = styled.span`
-  font-size: 1.2rem;
-  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  margin-right: 4px;
 `;
 
 export const RewardSelect = styled.select`
-  padding: 0.8rem 1rem;
-  background: rgba(30, 30, 30, 0.8);
-  border: 2px solid transparent;
-  border-radius: 12px;
-  color: white;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: ${props => props.theme.colors.text};
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
+  min-width: 150px;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
   }
   
-  @media (max-width: 768px) {
-    padding: 0.6rem 0.8rem;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px ${props => props.theme.colors.primary};
+  }
+  
+  option {
+    background: #1E1E1E;
+    color: ${props => props.theme.colors.text};
+    padding: 8px;
   }
 `;

@@ -10,13 +10,11 @@ import {
   AddButton,
   TimerDisplay,
   TimerContainer,
-  ProgressBar,
-  Progress,
-  MotivationalMessage,
   PresetContainer,
   PresetButton,
-  StopButton,
+  MotivationalMessage,
   BeastModeButton,
+  StopButton,
   RewardIcon,
   RewardSelect
 } from './styles';
@@ -81,7 +79,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({
   onStopTimer
 }) => {
   const [newTaskText, setNewTaskText] = useState('');
-  const [selectedReward, setSelectedReward] = useState<number | undefined>(undefined);
+  const [selectedReward, setSelectedReward] = useState<number | undefined>();
 
   const handleAddTask = () => {
     if (newTaskText.trim()) {
@@ -103,25 +101,20 @@ const TaskManager: React.FC<TaskManagerProps> = ({
     }
   };
 
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const getProgress = (): number => {
-    return ((timerState.initialTime - timerState.timeRemaining) / timerState.initialTime) * 100;
-  };
-
-  const handlePresetClick = (minutes: number) => {
+  const handlePresetClick = (seconds: number) => {
     if (!timerState.isActive) {
-      const seconds = minutes * 60;
       onUpdateTimerState({
         timeRemaining: seconds,
         initialTime: seconds,
         motivationalMessage: ''
       });
     }
+  };
+
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const updateMotivationalMessage = () => {
@@ -150,6 +143,17 @@ const TaskManager: React.FC<TaskManagerProps> = ({
           onKeyPress={handleKeyPress}
           placeholder="What do you want to accomplish? Press Enter to add..."
         />
+        <RewardSelect
+          value={selectedReward || ''}
+          onChange={(e) => setSelectedReward(Number(e.target.value) || undefined)}
+        >
+          <option value="">No Reward</option>
+          {rewards.map((reward) => (
+            <option key={reward.id} value={reward.id}>
+              🎁 {reward.text}
+            </option>
+          ))}
+        </RewardSelect>
         <AddButton onClick={handleAddTask}>
           <span>+</span> Add Task
         </AddButton>
@@ -186,14 +190,12 @@ const TaskManager: React.FC<TaskManagerProps> = ({
         {tasks.map((task) => (
           <TaskItem key={task.id}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-              <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => onToggleTaskCompletion(task.id)}
+              <TaskText
+                completed={task.completed}
+                onClick={() => onToggleTaskCompletion(task.id)}
                 style={{ cursor: 'pointer' }}
-              />
-              <TaskText completed={task.completed}>
-                {task.text}
+              >
+                {task.completed ? '✅' : '⬜️'} {task.text}
               </TaskText>
               {task.rewardId && (
                 <TaskText completed={task.completed} isReward>
