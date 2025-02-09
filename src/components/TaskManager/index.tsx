@@ -136,28 +136,55 @@ const TaskManager: React.FC<TaskManagerProps> = ({
   return (
     <TaskManagerContainer>
       <InputContainer>
-        <TaskInput
-          type="text"
-          value={newTaskText}
-          onChange={(e) => setNewTaskText(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="What do you want to accomplish? Press Enter to add..."
-        />
-        <RewardSelect
-          value={selectedReward || ''}
-          onChange={(e) => setSelectedReward(Number(e.target.value) || undefined)}
-        >
-          <option value="">No Reward</option>
-          {rewards.map((reward) => (
-            <option key={reward.id} value={reward.id}>
-              🎁 {reward.text}
-            </option>
-          ))}
-        </RewardSelect>
-        <AddButton onClick={handleAddTask}>
-          <span>+</span> Add Task
-        </AddButton>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+          <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+            <TaskInput
+              type="text"
+              value={newTaskText}
+              onChange={(e) => setNewTaskText(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="What do you want to accomplish? Press Enter to add..."
+            />
+            <AddButton onClick={handleAddTask}>
+              <span>+</span> Add Task
+            </AddButton>
+          </div>
+          <RewardSelect
+            value={selectedReward || ''}
+            onChange={(e) => setSelectedReward(Number(e.target.value) || undefined)}
+          >
+            <option value="">Select a reward (optional)</option>
+            {rewards.map((reward) => (
+              <option key={reward.id} value={reward.id}>
+                🎁 {reward.text}
+              </option>
+            ))}
+          </RewardSelect>
+        </div>
       </InputContainer>
+
+      <TaskList>
+        {tasks.map((task) => (
+          <TaskItem key={task.id}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+              <TaskText
+                completed={task.completed}
+                onClick={() => onToggleTaskCompletion(task.id)}
+                style={{ cursor: 'pointer' }}
+              >
+                {task.completed ? '✅' : '⬜️'} {task.text}
+              </TaskText>
+              {task.rewardId && (
+                <TaskText completed={task.completed} isReward>
+                  <RewardIcon>🎁</RewardIcon>
+                  {rewards.find(r => r.id === task.rewardId)?.text}
+                </TaskText>
+              )}
+            </div>
+            <DeleteButton onClick={() => onDeleteTask(task.id)}>×</DeleteButton>
+          </TaskItem>
+        ))}
+      </TaskList>
 
       <TimerContainer>
         <TimerDisplay>{formatTime(timerState.timeRemaining)}</TimerDisplay>
@@ -185,29 +212,6 @@ const TaskManager: React.FC<TaskManagerProps> = ({
           {timerState.motivationalMessage}
         </MotivationalMessage>
       </TimerContainer>
-
-      <TaskList>
-        {tasks.map((task) => (
-          <TaskItem key={task.id}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
-              <TaskText
-                completed={task.completed}
-                onClick={() => onToggleTaskCompletion(task.id)}
-                style={{ cursor: 'pointer' }}
-              >
-                {task.completed ? '✅' : '⬜️'} {task.text}
-              </TaskText>
-              {task.rewardId && (
-                <TaskText completed={task.completed} isReward>
-                  <RewardIcon>🎁</RewardIcon>
-                  {rewards.find(r => r.id === task.rewardId)?.text}
-                </TaskText>
-              )}
-            </div>
-            <DeleteButton onClick={() => onDeleteTask(task.id)}>×</DeleteButton>
-          </TaskItem>
-        ))}
-      </TaskList>
     </TaskManagerContainer>
   );
 };

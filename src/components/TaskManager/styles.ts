@@ -18,30 +18,21 @@ const glowAnimation = keyframes`
 `;
 
 export const TaskManagerContainer = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
   padding: 2rem;
   border-radius: 20px;
   background: rgba(18, 18, 18, 0.8);
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  ${glassmorphism}
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  
-  @media (max-width: 768px) {
-    padding: 1rem;
-    border-radius: 12px;
-  }
+  gap: 2rem;
 `;
 
 export const InputContainer = styled.div`
   display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
   background: rgba(255, 255, 255, 0.05);
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
@@ -64,17 +55,16 @@ export const TaskInput = styled.input`
   &::placeholder {
     color: rgba(255, 255, 255, 0.5);
   }
-  
-  @media (max-width: 768px) {
-    padding: 0.8rem 1rem;
-  }
 `;
 
 export const TaskList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1.5rem;
+  border-radius: 12px;
+  min-height: 100px;
 `;
 
 export const TaskItem = styled.div`
@@ -82,20 +72,13 @@ export const TaskItem = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
   transition: all 0.3s ease;
-  animation: ${fadeIn} 0.3s ease-out;
-  ${glassmorphism}
-  
+
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     transform: translateX(4px);
-  }
-  
-  @media (max-width: 768px) {
-    padding: 0.8rem;
-    font-size: 0.9rem;
   }
 `;
 
@@ -270,11 +253,11 @@ export const RewardSelect = styled.select`
   background: rgba(255, 255, 255, 0.05);
   border: none;
   color: ${props => props.theme.colors.text};
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1rem;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 150px;
+  width: 100%;
   
   &:hover {
     background: rgba(255, 255, 255, 0.1);
