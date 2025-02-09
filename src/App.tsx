@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
-import { TaskManager } from './components/TaskManager';
+import TaskManager from './components/TaskManager';
 import { RewardManager } from './components/RewardManager';
 import { Sidebar } from './components/Sidebar';
 import { GlobalStyle, theme } from './styles/theme';
