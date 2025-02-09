@@ -13,6 +13,10 @@ interface Task {
   completed: boolean;
   timestamp: number;
   rewardId?: number;
+  predictedMinutes?: number;
+  timeSpent: number; // Total time spent in seconds
+  isTracking: boolean; // Whether the task is currently being tracked
+  lastTrackingStart?: number; // Timestamp when tracking started
 }
 
 interface TimerState {
@@ -38,8 +42,8 @@ const App: React.FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const handleAddTask = (task: Task) => {
-    setTasks([...tasks, task]);
+  const handleAddTask = (task: Omit<Task, 'timeSpent' | 'isTracking'>) => {
+    setTasks([...tasks, { ...task, timeSpent: 0, isTracking: false }]);
   };
 
   const handleDeleteTask = (taskId: number) => {
@@ -55,6 +59,35 @@ const App: React.FC = () => {
         return { ...task, completed: !task.completed };
       }
       return task;
+    }));
+  };
+
+  const handleToggleTaskTracking = (taskId: number) => {
+    const now = Date.now();
+    setTasks(tasks.map(task => {
+      if (task.id === taskId) {
+        if (task.isTracking) {
+          // Stop tracking and add elapsed time
+          const elapsedSeconds = task.lastTrackingStart 
+            ? Math.floor((now - task.lastTrackingStart) / 1000)
+            : 0;
+          return {
+            ...task,
+            isTracking: false,
+            lastTrackingStart: undefined,
+            timeSpent: task.timeSpent + elapsedSeconds
+          };
+        } else {
+          // Start tracking
+          return {
+            ...task,
+            isTracking: true,
+            lastTrackingStart: now
+          };
+        }
+      } else {
+        return task;
+      }
     }));
   };
 
@@ -124,6 +157,49 @@ const App: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (timerState.isActive) {
+      const trackingInterval = setInterval(() => {
+        const now = Date.now();
+        setTasks(currentTasks => 
+          currentTasks.map(task => {
+            if (task.isTracking && task.lastTrackingStart) {
+              const elapsedSeconds = Math.floor((now - task.lastTrackingStart) / 1000);
+              return {
+                ...task,
+                timeSpent: task.timeSpent + elapsedSeconds,
+                lastTrackingStart: now
+              };
+            }
+            return task;
+          })
+        );
+      }, 1000);
+
+      return () => clearInterval(trackingInterval);
+    }
+  }, [timerState.isActive]);
+
+  useEffect(() => {
+    if (!timerState.isActive) {
+      const now = Date.now();
+      setTasks(currentTasks =>
+        currentTasks.map(task => {
+          if (task.isTracking && task.lastTrackingStart) {
+            const elapsedSeconds = Math.floor((now - task.lastTrackingStart) / 1000);
+            return {
+              ...task,
+              isTracking: false,
+              lastTrackingStart: undefined,
+              timeSpent: task.timeSpent + elapsedSeconds
+            };
+          }
+          return task;
+        })
+      );
+    }
+  }, [timerState.isActive]);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
@@ -142,6 +218,7 @@ const App: React.FC = () => {
               onAddTask={handleAddTask}
               onDeleteTask={handleDeleteTask}
               onToggleTaskCompletion={handleToggleTaskCompletion}
+              onToggleTaskTracking={handleToggleTaskTracking}
               onUpdateTimerState={handleUpdateTimerState}
               onStartTimer={handleStartTimer}
               onStopTimer={handleStopTimer}

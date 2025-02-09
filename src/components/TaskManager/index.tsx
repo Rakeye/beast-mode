@@ -16,7 +16,10 @@ import {
   BeastModeButton,
   StopButton,
   RewardIcon,
-  RewardSelect
+  RewardSelect,
+  TimeInput,
+  TaskStats,
+  TrackButton
 } from './styles';
 import type { Reward } from '../RewardManager';
 
@@ -26,6 +29,9 @@ interface Task {
   completed: boolean;
   timestamp: number;
   rewardId?: number;
+  predictedMinutes?: number;
+  timeSpent?: number;
+  isTracking?: boolean;
 }
 
 interface TimerState {
@@ -43,6 +49,7 @@ interface TaskManagerProps {
   onAddTask: (task: Task) => void;
   onDeleteTask: (taskId: number) => void;
   onToggleTaskCompletion: (taskId: number) => void;
+  onToggleTaskTracking: (taskId: number) => void;
   onUpdateTimerState: (updates: Partial<TimerState>) => void;
   onStartTimer: () => void;
   onStopTimer: () => void;
@@ -74,12 +81,14 @@ const TaskManager: React.FC<TaskManagerProps> = ({
   onAddTask,
   onDeleteTask,
   onToggleTaskCompletion,
+  onToggleTaskTracking,
   onUpdateTimerState,
   onStartTimer,
   onStopTimer
 }) => {
   const [newTaskText, setNewTaskText] = useState('');
   const [selectedReward, setSelectedReward] = useState<number | undefined>();
+  const [predictedMinutes, setPredictedMinutes] = useState<number>(15);
 
   const handleAddTask = () => {
     if (newTaskText.trim()) {
@@ -88,10 +97,12 @@ const TaskManager: React.FC<TaskManagerProps> = ({
         text: newTaskText.trim(),
         completed: false,
         timestamp: Date.now(),
-        rewardId: selectedReward
+        rewardId: selectedReward,
+        predictedMinutes
       });
       setNewTaskText('');
       setSelectedReward(undefined);
+      setPredictedMinutes(15);
     }
   };
 
@@ -115,6 +126,19 @@ const TaskManager: React.FC<TaskManagerProps> = ({
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const formatTimeSpent = (seconds: number): string => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    
+    if (hours > 0) {
+      return `${hours}h ${minutes}m ${remainingSeconds}s`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${remainingSeconds}s`;
+    }
+    return `${remainingSeconds}s`;
   };
 
   const updateMotivationalMessage = () => {
@@ -149,17 +173,27 @@ const TaskManager: React.FC<TaskManagerProps> = ({
               <span>+</span> Add Task
             </AddButton>
           </div>
-          <RewardSelect
-            value={selectedReward || ''}
-            onChange={(e) => setSelectedReward(Number(e.target.value) || undefined)}
-          >
-            <option value="">Select a reward (optional)</option>
-            {rewards.map((reward) => (
-              <option key={reward.id} value={reward.id}>
-                🎁 {reward.text}
-              </option>
-            ))}
-          </RewardSelect>
+          <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+            <TimeInput
+              type="number"
+              min="1"
+              max="480"
+              value={predictedMinutes}
+              onChange={(e) => setPredictedMinutes(Math.max(1, Math.min(480, parseInt(e.target.value) || 15)))}
+              placeholder="Estimated time (minutes)"
+            />
+            <RewardSelect
+              value={selectedReward || ''}
+              onChange={(e) => setSelectedReward(Number(e.target.value) || undefined)}
+            >
+              <option value="">Select a reward (optional)</option>
+              {rewards.map((reward) => (
+                <option key={reward.id} value={reward.id}>
+                  🎁 {reward.text}
+                </option>
+              ))}
+            </RewardSelect>
+          </div>
         </div>
       </InputContainer>
 
@@ -174,6 +208,19 @@ const TaskManager: React.FC<TaskManagerProps> = ({
               >
                 {task.completed ? '✅' : '⬜️'} {task.text}
               </TaskText>
+              <TaskStats>
+                {task.predictedMinutes && (
+                  <span title="Predicted time">⏱️ {task.predictedMinutes}m</span>
+                )}
+                <span title="Time spent">⌛ {formatTimeSpent(task.timeSpent || 0)}</span>
+                <TrackButton
+                  isTracking={task.isTracking}
+                  onClick={() => onToggleTaskTracking(task.id)}
+                  title={task.isTracking ? 'Stop tracking' : 'Start tracking'}
+                >
+                  {task.isTracking ? '⏸️' : '▶️'}
+                </TrackButton>
+              </TaskStats>
               {task.rewardId && (
                 <TaskText completed={task.completed} isReward>
                   <RewardIcon>🎁</RewardIcon>

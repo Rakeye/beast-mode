@@ -274,3 +274,60 @@ export const RewardSelect = styled.select`
     padding: 8px;
   }
 `;
+
+export const TimeInput = styled.input`
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: ${props => props.theme.colors.text};
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  width: 150px;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px ${props => props.theme.colors.primary};
+  }
+  
+  &::-webkit-inner-spin-button {
+    opacity: 1;
+  }
+`;
+
+export const TaskStats = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  
+  span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+`;
+
+export const TrackButton = styled.button<{ isTracking?: boolean }>`
+  background: none;
+  border: none;
+  color: ${props => props.isTracking ? props.theme.colors.primary : props.theme.colors.text};
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.1);
+  }
+`;
