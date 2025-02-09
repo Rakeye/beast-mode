@@ -24,7 +24,7 @@ interface TimerState {
 }
 
 const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('tasks');
+  const [activeSection, setActiveSection] = useState('tasks');
   const [rewards, setRewards] = useState<Reward[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [timerState, setTimerState] = useState<TimerState>({
@@ -130,11 +130,11 @@ const App: React.FC = () => {
       <AppContainer>
         <audio ref={audioRef} src="/lion-roar.flac" preload="auto" />
         <Sidebar
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
         />
         <MainContent>
-          {activeTab === 'tasks' ? (
+          {activeSection === 'tasks' ? (
             <TaskManager
               tasks={tasks}
               rewards={rewards}
